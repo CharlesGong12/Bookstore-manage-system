@@ -3,14 +3,35 @@
 {% block content %}
     <div class="container">
         <div style="margin-bottom: 10px">
-            <a class="btn btn-primary" href="/book/add/">
-                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                新建书籍信息
-            </a> <!-- 使用 target = '_blank' 可以在新页面打开-->
+            <div class="row">
+                <div class="col-md-4">
+                    <a class="btn btn-primary" href="/book/add/">
+                        <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                        新建书籍信息
+                    </a> <!-- 使用 target = '_blank' 可以在新页面打开-->
+                </div>
+                <div class="col-md-4 col-md-offset-4">
+                    <form method="get">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="ISBN/书名/作者" name="query" value="{{ search_data }}">
+                            <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                        </div><!-- /input-group -->
+                    </form>
+                </div>
+            </div>
         </div>
+
+
         <div class="panel panel-default">
             <!-- Default panel contents -->
-            <div class="panel-heading">书籍信息列表</div>
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                书籍信息列表
+            </div>
 
             <!-- Table -->
             <table class="table">
