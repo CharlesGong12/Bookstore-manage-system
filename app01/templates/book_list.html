@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px">
+            <a class="btn btn-primary" href="/book/add/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建书籍信息
+            </a> <!-- 使用 target = '_blank' 可以在新页面打开-->
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">书籍信息列表</div>
+
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>书名</th>
+                    <th>出版社</th>
+                    <th>作者</th>
+                    <th>零售价格</th>
+                    <th>库存量</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <td>{{ obj.isbn }}</td>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.press }}</td>
+                        <td>{{ obj.author }}</td>
+                        <td>{{ obj.retail_price }}</td>
+                        <td>{{ obj.amount }}</td>
+                        <td>
+                            <a class="btn btn-success btn-xs" href='/book/{{ obj.id }}/sale/'>出售</a>
+                            <a class="btn btn-info btn-xs" href='/book/{{ obj.id }}/edit/'>编辑</a>
+                            <a class="btn btn-danger btn-xs" href="/book/{{ obj.id }}/delete">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
