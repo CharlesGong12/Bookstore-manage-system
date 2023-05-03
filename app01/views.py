@@ -63,6 +63,7 @@ def book_list(request):
 
 def book_add(request):
     '''
+    待完善
     这个函数用户初始化书籍信息，可以定义库存
     我希望初始化时候定义的库存可以加入到进出货账单上去，便于最后记录
     :param request:
