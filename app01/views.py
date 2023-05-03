@@ -3,6 +3,7 @@ from django.core.validators import RegexValidator, ValidationError
 from app01 import models
 from django import forms
 from django.db.models import Q
+from app01.utils.pagination import Pagination
 
 
 # Create your views here.
@@ -57,8 +58,13 @@ def book_list(request):
             .order_by('name')
     else:
         queryset = models.BookInfo.objects.all().order_by('name')
-
-    return render(request, 'book_list.html', {'queryset': queryset, 'search_data': search_data})
+    page_object = Pagination(request, queryset, page_size=8)
+    context = {
+        "queryset": page_object.page_queryset,  # 分完页的数据
+        "page_string": page_object.html(),  # 生成页码
+        "search_data": search_data,
+    }
+    return render(request, 'book_list.html', context)
 
 
 def book_add(request):
