@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px">
+            <a class="btn btn-success" href="/admin/add/">新建管理员</a> <!-- target = '_blank' 可以新页面打开-->
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">管理员列表</div>
+
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>用户组</th>
+                    <th>工号</th>
+                    <th>用户名</th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>性别</th>
+                    <th>密码</th>
+                    <th>操作</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <td>{{ obj.get_group_display }}</td>
+                        <td>{{ obj.employee_id }}</td>
+                        <td>{{ obj.username }}</td>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.age }}</td>
+                        <td>{{ obj.get_gender_display }}</td>
+                        <td>******</td>
+                        <td>
+                            <a class="btn btn-primary btn-xs" href='/admin/{{ obj.id }}/edit/'>编辑</a>
+                            <a class="btn btn-danger btn-xs" href="/admin/{{ obj.id }}/delete">删除</a>
+                            <a class="btn btn-warning btn-xs" href='/admin/{{ obj.id }}/reset/'>密码重置</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
