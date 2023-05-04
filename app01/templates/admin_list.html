@@ -3,7 +3,11 @@
 {% block content %}
     <div class="container">
         <div style="margin-bottom: 10px">
-            <a class="btn btn-success" href="/admin/add/">新建管理员</a> <!-- target = '_blank' 可以新页面打开-->
+            <a class="btn btn-primary" href="/admin/add/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建管理员
+            </a>
+            <!-- target = '_blank' 可以新页面打开-->
         </div>
         <div class="panel panel-default">
             <!-- Default panel contents -->
@@ -35,7 +39,7 @@
                         <td>{{ obj.get_gender_display }}</td>
                         <td>******</td>
                         <td>
-                            <a class="btn btn-primary btn-xs" href='/admin/{{ obj.id }}/edit/'>编辑</a>
+                            <a class="btn btn-info btn-xs" href='/admin/{{ obj.id }}/edit/'>编辑</a>
                             <a class="btn btn-danger btn-xs" href="/admin/{{ obj.id }}/delete">删除</a>
                             <a class="btn btn-warning btn-xs" href='/admin/{{ obj.id }}/reset/'>密码重置</a>
                         </td>
