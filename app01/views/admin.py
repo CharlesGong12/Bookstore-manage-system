@@ -9,7 +9,12 @@ from app01.utils.form import *
 
 def admin_list(request):
     queryset = models.Admin.objects.all().order_by('group')
-    return render(request, 'admin_list.html', {'queryset': queryset})
+    page_object = Pagination(request, queryset, page_size=8)
+    context = {
+        "queryset": page_object.page_queryset,  # 分完页的数据
+        "page_string": page_object.html()  # 生成页码
+    }
+    return render(request, 'admin_list.html', context)
 
 
 def admin_add(request):

@@ -55,7 +55,9 @@ class Pagination(object):
             page = int(page)
         else:
             page = 1
-
+        if page == 0:
+            page = 1
+            
         self.page = page
         self.page_size = page_size
 
