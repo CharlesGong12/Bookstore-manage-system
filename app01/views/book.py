@@ -45,18 +45,19 @@ def book_add(request):
 
 
 def book_edit(request, nid):
+    title = '编辑图书信息'
     row_object = models.BookInfo.objects.filter(id=nid).first()
     if request.method == 'GET':
         form = BookEditInfoModelForm(instance=row_object)
         # 使用instance属性，这种方式可以实现填写默认值，相当于把value属性全部设置。还有一个功能是能找到更新的位置
-        return render(request, 'book_edit.html', {'form': form})
+        return render(request, 'change.html', {'form': form,'title':title})
     else:
         form = BookEditInfoModelForm(data=request.POST, instance=row_object)
         if form.is_valid():
             form.save()
             return redirect('/book/list/')
         else:
-            return render(request, 'book_edit.html', {'form': form})
+            return render(request, 'change.html', {'form': form,'title':title})
 
 
 def book_delete(request, nid):
