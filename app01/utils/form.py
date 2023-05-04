@@ -164,3 +164,45 @@ class LoginForm(BootStrapForm):
         pwd = self.cleaned_data.get("password")
         return md5(pwd)
 
+
+class UserEditModelForm(BootStrapModelForm):
+    # 不允许编辑密码 用户组
+    group_choices = (
+        (1, "超级管理员"),
+        (2, "普通管理员"),
+    )
+    group = forms.ChoiceField(label='用户组', choices=group_choices, disabled=True)
+    password = forms.CharField(label='密码', widget=forms.PasswordInput)
+    class Meta:
+        model = models.Admin
+        fields = ['username', 'employee_id', 'name', 'age', 'gender', 'group','password']
+
+    def clean_username(self):
+        txt_username = self.cleaned_data['username']
+        exist = models.Admin.objects.exclude(id=self.instance.pk).filter(username=txt_username).exists()
+        # 排除当前编辑的对象，考察手机号是否存在
+        # self.instance可以获得当前编辑的对象
+        if not exist:
+            return txt_username
+        else:
+            raise ValidationError('用户名已存在')
+
+    def clean_employee_id(self):
+        txt_employee_id = self.cleaned_data['employee_id']
+        exist = models.Admin.objects.exclude(id=self.instance.pk).filter(employee_id=txt_employee_id).exists()
+        # 排除当前编辑的对象，考察手机号是否存在
+        # self.instance可以获得当前编辑的对象
+        if not exist:
+            return txt_employee_id
+        else:
+            raise ValidationError('工号已存在')
+
+    def clean_password(self):
+        # 钩子函数 最后存储到数据库的是经过此函数处理的值(经过clean方法) 可用于校验
+        # self.cleaned_data 可以用于获取用户输入到表单中的值
+        password = self.cleaned_data.get('password')
+        md5_pwd = md5(password)
+        if models.Admin.objects.filter(id=self.instance.pk, password=md5_pwd).exists():
+            raise ValidationError('新密码不能与原密码相同')
+        return md5(password)
+

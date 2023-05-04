@@ -14,9 +14,9 @@ def user_edit(request, nid):
         # 存在性检查时为了防止并发操作
         return render(request, 'error.html', {'error_msg': '该数据不存在'})
     if request.method == 'GET':
-        form = AdminEditModelForm(instance=row_object)
+        form = UserEditModelForm(instance=row_object)
         return render(request, 'user_edit.html', {'form': form})
-    form = AdminEditModelForm(data=request.POST, instance=row_object)
+    form = UserEditModelForm(data=request.POST, instance=row_object)
     if form.is_valid():
         form.save()
         return redirect('/logout/')
