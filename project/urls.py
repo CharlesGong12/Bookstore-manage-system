@@ -24,7 +24,7 @@ urlpatterns = [
     path('book/add/', book.book_add),
     path('book/<int:nid>/edit/', book.book_edit),
     path('book/<int:nid>/delete/', book.book_delete),
-    # path('book/<int:nid>/sale', book.book_sale)
+    path('book/<int:nid>/sale/', book.book_sale),
 
     # 管理员用户管理
     path('admin/list/', admin.admin_list),

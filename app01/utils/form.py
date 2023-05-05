@@ -35,6 +35,18 @@ class BookEditInfoModelForm(BootStrapModelForm):
         fields = ['isbn', 'name', 'press', 'author', 'retail_price', 'amount']  # 可以自己指定 也可以__all__
 
 
+class BookSaleModelForm(BootStrapModelForm):
+    isbn = forms.CharField(disabled=True, label="ISBN")  # 不允许修改isbn号
+    name = forms.CharField(disabled=True, label='作者')
+    retail_price = forms.DecimalField(disabled=True, label='零售价')
+    amount = forms.IntegerField(label='出售数量')  # 创建后即不允许修改库存数量，只能通过进出货修改
+
+    class Meta:
+        model = models.BookInfo
+        fields = ['isbn', 'name', 'retail_price', 'amount']  # 可以自己指定 也可以__all__
+
+
+
 class AdminModelForm(BootStrapModelForm):
     confirm_password = forms.CharField(
         label='确认密码',
