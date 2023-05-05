@@ -4,7 +4,7 @@ from django.shortcuts import HttpResponse, redirect, render
 
 class AuthMiddleware(MiddlewareMixin):
     # 登录才能进入页面
-    def process_request(self, request):
+    def process_request(self, request): # 在视图函数执行之前调用
         # 0.排除那些不需要登录就能访问的页面
         #   request.path_info 获取当前用户请求的URL /login/
         if request.path_info == "/login/":
