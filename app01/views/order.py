@@ -63,8 +63,8 @@ def order_pay(request, nid):
     username = info_dict['username']  # 获取当前用户名
     txt_isbn = row_object.isbn  # 获取当前isbn
     book_name = models.BookInfo.objects.filter(isbn=txt_isbn).first().name  # 找到该isbn对应的书名
-    models.Bill.objects.create(type=2, amount= -row_object.total,
-                               description='图书进货付款:《{name}》*{num}'.format(name = book_name,
+    models.Bill.objects.create(type=2, amount=-row_object.total,
+                               description='图书进货付款:《{name}》*{num}'.format(name=book_name,
                                                                                 num=row_object.purchase_amount),
                                username=models.Admin.objects.filter(username=username).first())
     balance_object = models.SystemBalance.objects.first()
@@ -74,4 +74,6 @@ def order_pay(request, nid):
     origin_balance = balance_object.balance
     models.SystemBalance.objects.all().update(balance=origin_balance - row_object.total)
     models.Order.objects.filter(id=nid).update(state=2)
+    updated_amount = row_object.purchase_amount + models.BookInfo.objects.filter(isbn=txt_isbn).first().amount
+    models.BookInfo.objects.filter(isbn=txt_isbn).update(amount=updated_amount)
     return redirect('/order/list/')

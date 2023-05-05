@@ -76,18 +76,14 @@ def book_sale(request, nid):
         # 使用instance属性，这种方式可以实现填写默认值，相当于把value属性全部设置。还有一个功能是能找到更新的位置
         return render(request, 'change.html', {'form': form, 'title': title})
     else:
-        remain_amount = row_object.amount  # 这里好奇怪为何必须放在前面，可能和instance有关
+        remain_amount = row_object.amount
         form = BookSaleModelForm(data=request.POST, instance=row_object)
         if form.is_valid():
             with transaction.atomic():
                 # 更新库存数量
                 # remain_amount = row_object.amount 放在这里就会和sale_amount相同
-                sale_amount = form.cleaned_data['amount']
-                if remain_amount < sale_amount:
-                    raise ValidationError('图书剩余数量不足')
-                else:
-                    print('debug:', remain_amount, sale_amount)
-                    models.BookInfo.objects.filter(id=nid).update(amount=remain_amount - sale_amount)
+                sale_amount = form.cleaned_data['sale_amount']
+                models.BookInfo.objects.filter(id=nid).update(amount=remain_amount - sale_amount)
 
                 # 创建账单
                 amount_type = 1  # 1表示收入

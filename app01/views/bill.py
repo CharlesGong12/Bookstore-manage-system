@@ -8,7 +8,7 @@ from app01.utils.form import *
 
 
 def bill_list(request):
-    queryset = models.Bill.objects.all().order_by('timestamp')
+    queryset = models.Bill.objects.all().order_by('-timestamp')
     page_object = Pagination(request, queryset, page_size=8)
     balance_obj = models.SystemBalance.objects.first()
     if balance_obj:
