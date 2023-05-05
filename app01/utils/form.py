@@ -173,9 +173,10 @@ class UserEditModelForm(BootStrapModelForm):
     )
     group = forms.ChoiceField(label='用户组', choices=group_choices, disabled=True)
     password = forms.CharField(label='密码', widget=forms.PasswordInput)
+
     class Meta:
         model = models.Admin
-        fields = ['username', 'employee_id', 'name', 'age', 'gender', 'group','password']
+        fields = ['username', 'employee_id', 'name', 'age', 'gender', 'group', 'password']
 
     def clean_username(self):
         txt_username = self.cleaned_data['username']
@@ -206,3 +207,15 @@ class UserEditModelForm(BootStrapModelForm):
             raise ValidationError('新密码不能与原密码相同')
         return md5(password)
 
+
+class BillModelForm(BootStrapModelForm):
+    class Meta:
+        model = models.Bill
+        fields = ['type', 'amount', 'description']
+
+    def clean_amount(self):
+        amount_type = self.cleaned_data.get('type')
+        amount = self.cleaned_data.get('amount')
+        if amount_type == 1 and amount <= 0 or amount_type != 1 and amount >= 0:
+            raise ValidationError('收入金额需为正数，支出金额需为负数')
+        return amount

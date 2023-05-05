@@ -37,4 +37,5 @@ class UserEditMiddleware(MiddlewareMixin):
         info_dict = request.session.get("info")
         if '/user/' in request.path_info and '/edit/' in request.path_info and request.path_info != '/user/{}/edit/'.format(info_dict['id']):
             # 如果访问/user/<int>/edit/而且访问的nid不是自己的id，不被允许
+            # 后来想想自己写的不好，这样的话就不如直接写在user_edit函数中
             return render(request, 'error.html', {'error_msg': '您无权从此处修改他人信息，如果您是超级管理员，请从“用户管理”修改'})
