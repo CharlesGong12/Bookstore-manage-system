@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.core.validators import MinValueValidator
 
 
 # Create your models here.
@@ -53,3 +54,21 @@ class Bill(models.Model):
     type = models.SmallIntegerField(verbose_name='类型', choices=type_choices)
     amount = models.DecimalField(verbose_name='金额', max_digits=16, decimal_places=2)
     description = models.CharField(verbose_name='备注', max_length=128, null=True, blank=True)
+
+
+class Order(models.Model):
+    timestamp = models.DateTimeField(verbose_name='创建时间', default=timezone.now().strftime("%Y-%m-%d %H:%M:%S"))
+    username = models.ForeignKey(verbose_name='操作用户', to='Admin', to_field='username', null=True, blank=True,
+                                 on_delete=models.SET_NULL, db_column='username')
+    isbn = models.CharField(verbose_name="ISBN", max_length=13)
+    purchase_price = models.DecimalField(verbose_name="进货价格", max_digits=8, decimal_places=2, default=0,
+                                         validators=[MinValueValidator(0)])
+    purchase_amount = models.PositiveIntegerField(verbose_name="进货数量")
+    total = models.DecimalField(verbose_name='总金额', max_digits=12, decimal_places=2, default=0)
+    state_choice = ((1, '未支付'), (2, '已支付'), (3, '已取消'))
+    state = models.SmallIntegerField(verbose_name='订单状态', choices=state_choice, default=1)
+
+    def save(self, *args, **kwargs):
+        # 在模型保存时会自动计算这个属性
+        self.total = (self.purchase_price * self.purchase_amount)
+        super(Order, self).save(*args, **kwargs)

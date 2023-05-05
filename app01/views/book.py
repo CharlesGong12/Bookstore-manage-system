@@ -76,7 +76,7 @@ def book_sale(request, nid):
         # 使用instance属性，这种方式可以实现填写默认值，相当于把value属性全部设置。还有一个功能是能找到更新的位置
         return render(request, 'change.html', {'form': form, 'title': title})
     else:
-        remain_amount = row_object.amount  # 这里好奇怪必须放在前面，可能和instance有关
+        remain_amount = row_object.amount  # 这里好奇怪为何必须放在前面，可能和instance有关
         form = BookSaleModelForm(data=request.POST, instance=row_object)
         if form.is_valid():
             with transaction.atomic():
@@ -93,7 +93,8 @@ def book_sale(request, nid):
                 amount_type = 1  # 1表示收入
                 amount = row_object.retail_price * sale_amount  # 此处amount是本次销售额
                 models.Bill.objects.create(type=amount_type, amount=amount,
-                                           description='图书出售',
+                                           description='图书出售:《{name}》*{num}'.format(name=form.cleaned_data['name'],
+                                                                                      num=sale_amount),
                                            username=models.Admin.objects.filter(username=username).first())
 
                 # 更新余额
