@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px">
+            <a class="btn btn-primary" href="/bill/add/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建额外账单
+            </a>
+            <!-- target = '_blank' 可以新页面打开-->
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">账单列表</div>
+
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="width: 200px;">时间</th>
+                    <th>用户</th>
+                    <th>类型</th>
+                    <th>金额</th>
+                    <th>备注</th>
+                    <th>操作</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <td>{{ obj.timestamp|date:"Y-m-d H:i:s" }}</td>
+                        <td>{{ obj.username.username }}</td>
+                        <td>{{ obj.get_type_display }}</td>
+                        <td>{{ obj.amount }}</td>
+                        <td>{{ obj.description }}</td>
+                        <td>
+                            <a class="btn btn-danger btn-xs" href="/bill/{{ obj.id }}/delete">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div>
+            账户余额: {{ balance }}
+        </div>
+        <div style="text-align: center">
+            <ul class="pagination">
+                {{ page_string }}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
