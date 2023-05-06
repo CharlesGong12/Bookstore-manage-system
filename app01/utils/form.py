@@ -39,12 +39,19 @@ class BookSaleModelForm(BootStrapModelForm):
     isbn = forms.CharField(disabled=True, label="ISBN")  # 不允许修改isbn号
     name = forms.CharField(disabled=True, label='作者')
     retail_price = forms.DecimalField(disabled=True, label='零售价')
-    amount = forms.IntegerField(label='出售数量')  # 创建后即不允许修改库存数量，只能通过进出货修改
+    sale_amount = forms.IntegerField(label='出售数量')  # 创建后即不允许修改库存数量，只能通过进出货修改
 
     class Meta:
         model = models.BookInfo
-        fields = ['isbn', 'name', 'retail_price', 'amount']  # 可以自己指定 也可以__all__
+        fields = ['isbn', 'name', 'retail_price', 'sale_amount']  # 可以自己指定 也可以__all__
 
+    def clean_sale_amount(self):
+        txt_sale_amount = self.cleaned_data['sale_amount']
+        remain_amount = models.BookInfo.objects.filter(id=self.instance.pk).first().amount
+        if remain_amount < txt_sale_amount:
+            raise ValidationError('库存数量小于出售数量')
+        else:
+            return txt_sale_amount
 
 class AdminModelForm(BootStrapModelForm):
     confirm_password = forms.CharField(
@@ -242,4 +249,3 @@ class OrderModelForm(BootStrapModelForm):
         if not models.BookInfo.objects.filter(isbn=txt_isbn).exists():
             raise ValidationError('该书籍信息在数据库中不存在，请先添加书籍信息')
         return txt_isbn
-

@@ -7,8 +7,9 @@ from app01.utils.pagination import Pagination
 from app01.utils.form import *
 import datetime
 
+
 def bill_list(request):
-    queryset = models.Bill.objects.all().order_by('timestamp')
+    queryset = models.Bill.objects.all().order_by('-timestamp')
     page_object = Pagination(request, queryset, page_size=8)
     balance_obj = models.SystemBalance.objects.first()
     if balance_obj:
@@ -53,18 +54,20 @@ def bill_delete(request, nid):
     models.Bill.objects.filter(id=nid).delete()
     return redirect('/bill/list/')
 
+
 def parse_period(period):
     """
     用于将period中的日期分割为起、止时间, 截止时间默认为当前
     """
     if '~' in period:
-        start_date,end_date=period.split('~')
+        start_date, end_date = period.split('~')
     else:
-        start_date=period
-        end_date=datetime.date.today()
-    start_date=datetime.datetime.strptime(str(start_date),'%Y-%m-%d')   #参数需为字符串
-    end_date=datetime.datetime.strptime(str(end_date),'%Y-%m-%d')
-    return start_date,end_date
+        start_date = period
+        end_date = datetime.date.today()
+    start_date = datetime.datetime.strptime(str(start_date), '%Y-%m-%d')  # 参数需为字符串
+    end_date = datetime.datetime.strptime(str(end_date), '%Y-%m-%d')
+    return start_date, end_date
+
 
 def financial_history(request):
     """
@@ -97,4 +100,4 @@ def financial_history(request):
         'period':start_date.strftime('%Y-%m-%d')+'~'+end_date.strftime('%Y-%m-%d'),
         'income_expense':type_display
     }
-    return render(request,'financial_history.html',context)
+    return render(request, 'financial_history.html', context)
