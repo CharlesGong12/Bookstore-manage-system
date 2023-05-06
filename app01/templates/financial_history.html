@@ -3,15 +3,17 @@
 {% block content %}
 <h1>财务记录</h1>
 <form method="GET" class="text-center">
-    <label>时间段: 
-        <input type="text" name="period" class="form-control"> 
-        例如 2020-01 或 2020-05-01~2020-05-31
+    <label>起始日期: 
+        <input type="date" name="start_date" class="form-control" max="today" > 
+    </label>
+    <label>结束日期: 
+        <input type="date" name="end_date" class="form-control" value="today" max="today" > 
     </label>
     <br>
     <label>收入/支出:
-        <input type="radio" name="income_expense" value="1" class="form-check-input"> 收入  
-        <input type="radio" name="income_expense" value="2" class="form-check-input"> 支出
-        <input type="radio" name="income_expense" value="0" class="form-check-input"> 总收益
+        <input type="radio" name="income_expense" value=1 class="form-check-input" autocomplete="off"> 收入  
+        <input type="radio" name="income_expense" value=2 class="form-check-input" autocomplete="off"> 支出
+        <input type="radio" name="income_expense" value=0 class="form-check-input" autocomplete="off"> 总收益
     </label>
     <button type="submit">查询</button>
 </form>
