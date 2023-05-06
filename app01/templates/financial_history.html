@@ -32,27 +32,17 @@
     <tbody  class="table-light">
     {% for bill in bills %}
         <tr>
-            <th>记账时间</th>
-            <th>操作用户</th>
-            <th>收入/支出</th>
-            <th>金额(¥)</th>
-            <th>备注</th>
-        </tr>
-        </thead>
-        <tbody class="table-light">
-        {% for bill in bills %}
-            <tr>
-                <td>{{ bill.timestamp }}</td>
-                <td>{{ bill.username.username }}</td>
-                <td>{% if bill.type == 1 %}
-                    <span class="badge badge-success">收入</span>
-                {% elif bill.type == 2 %}
-                    <span class="badge badge-danger">支出</span>
+            <td>{{ bill.timestamp}}</td>
+            <td>{{ bill.username.username}}</td>
+            <td>{% if bill.type == 1 %}
+                <span class="badge badge-success">收入</span>
+                {% elif bill.type == 2 %} 
+                <span class="badge badge-danger">支出</span>
                 {% endif %}</td>
-                <td>{{ bill.amount }}</td>
-                <td>{{ bill.description }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <td>{{ bill.amount }}</td>
+            <td>{{ bill.description }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
