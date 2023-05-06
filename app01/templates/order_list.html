@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px">
+            <a class="btn btn-primary" href="/order/add/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                新建进货订单
+            </a>
+            <!-- target = '_blank' 可以新页面打开-->
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">订单列表</div>
+
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>创建时间</th>
+                    <th>操作用户</th>
+                    <th>ISBN</th>
+                    <th>进货数量</th>
+                    <th>进货价格 ￥</th>
+                    <th>总金额 ¥</th>
+                    <th>订单状态</th>
+                    <th>操作</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <td>{{ obj.timestamp|date:"Y-m-d H:i:s" }}</td>
+                        <td>{{ obj.username.username }}</td>
+                        <td>{{ obj.isbn }}</td>
+                        <td>{{ obj.purchase_amount }}</td>
+                        <td>{{ obj.purchase_price }}</td>
+                        <td>{{ obj.total }}</td>
+                        <td>{{ obj.get_state_display }}</td>
+                        <td>
+                            {% if obj.state == 1 %}
+                                <a class="btn btn-primary btn-xs" href="/order/{{ obj.id }}/pay/">支付订单</a>
+                                <a class="btn btn-warning btn-xs" href="/order/{{ obj.id }}/cancel/">取消订单</a>
+                            {% endif %}
+                            {% if obj.state == 2 or obj.state == 3 %}
+                                <a class="btn btn-danger btn-xs" href="/order/{{ obj.id }}/delete/">删除订单</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div style="text-align: center">
+            <ul class="pagination">
+                {{ page_string }}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

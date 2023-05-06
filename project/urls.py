@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from app01.views import book, admin, account, user, bill
+from app01.views import book, admin, account, user, bill, order
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -46,4 +46,11 @@ urlpatterns = [
     path('bill/add/', bill.bill_add),
     path('bill/<int:nid>/delete/', bill.bill_delete),
     path('bill/history/',bill.financial_history),
+
+    # 图书进货: 订单管理
+    path('order/list/', order.order_list),  # 列表
+    path('order/add/', order.order_add),  # 添加
+    path('order/<int:nid>/pay/', order.order_pay),  # 支付
+    path('order/<int:nid>/cancel/', order.order_cancel),  # 取消订单: 针对未付款书籍
+    path('order/<int:nid>/delete/', order.order_delete),  # 删除订单：针对已付款书籍
 ]

@@ -27,8 +27,8 @@
                     <th style="width: 200px;">时间</th>
                     <th>用户</th>
                     <th>类型</th>
-                    <th>金额</th>
-                    <th>备注</th>
+                    <th>金额 ¥</th>
+                    <th style="width: 280px;">备注</th>
                     <th>操作</th>
 
                 </tr>
@@ -42,7 +42,7 @@
                         <td>{{ obj.amount }}</td>
                         <td>{{ obj.description }}</td>
                         <td>
-                            <a class="btn btn-danger btn-xs" href="/bill/{{ obj.id }}/delete">删除</a>
+                            <a class="btn btn-danger btn-xs" href="/bill/{{ obj.id }}/delete/">删除</a>
                         </td>
                     </tr>
                 {% endfor %}

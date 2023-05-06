@@ -46,7 +46,6 @@ class BookSaleModelForm(BootStrapModelForm):
         fields = ['isbn', 'name', 'retail_price', 'amount']  # 可以自己指定 也可以__all__
 
 
-
 class AdminModelForm(BootStrapModelForm):
     confirm_password = forms.CharField(
         label='确认密码',
@@ -108,7 +107,7 @@ class AdminEditModelForm(BootStrapModelForm):
     def clean_username(self):
         txt_username = self.cleaned_data['username']
         exist = models.Admin.objects.exclude(id=self.instance.pk).filter(username=txt_username).exists()
-        # 排除当前编辑的对象，考察手机号是否存在
+        # 排除当前编辑的对象，考察用户名是否存在
         # self.instance可以获得当前编辑的对象
         if not exist:
             return txt_username
@@ -231,3 +230,16 @@ class BillModelForm(BootStrapModelForm):
         if amount_type == 1 and amount <= 0 or amount_type != 1 and amount >= 0:
             raise ValidationError('收入金额需为正数，支出金额需为负数')
         return amount
+
+
+class OrderModelForm(BootStrapModelForm):
+    class Meta:
+        model = models.Order
+        fields = ['isbn', 'purchase_price', 'purchase_amount']
+
+    def clean_isbn(self):
+        txt_isbn = self.cleaned_data['isbn']
+        if not models.BookInfo.objects.filter(isbn=txt_isbn).exists():
+            raise ValidationError('该书籍信息在数据库中不存在，请先添加书籍信息')
+        return txt_isbn
+
