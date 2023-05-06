@@ -34,6 +34,7 @@ urlpatterns = [
     path('admin/<int:nid>/reset/', admin.admin_reset),
 
     # 账户: 登录与注销
+    path('', account.login),
     path('login/', account.login),
     path('logout/', account.logout),
 
@@ -44,6 +45,7 @@ urlpatterns = [
     path('bill/list/', bill.bill_list),
     path('bill/add/', bill.bill_add),
     path('bill/<int:nid>/delete/', bill.bill_delete),
+    path('bill/history/', bill.financial_history),
 
     # 图书进货: 订单管理
     path('order/list/', order.order_list),  # 列表

@@ -5,6 +5,7 @@ from django import forms
 from django.db.models import Q
 from app01.utils.pagination import Pagination
 from app01.utils.form import *
+import datetime
 
 
 def bill_list(request):
@@ -52,3 +53,49 @@ def bill_add(request):
 def bill_delete(request, nid):
     models.Bill.objects.filter(id=nid).delete()
     return redirect('/bill/list/')
+
+
+def parse_period(period):
+    """
+    用于将period中的日期分割为起、止时间, 截止时间默认为当前
+    """
+    if '~' in period:
+        start_date, end_date = period.split('~')
+    else:
+        start_date = period
+        end_date = datetime.date.today()
+    start_date = datetime.datetime.strptime(str(start_date), '%Y-%m-%d')  # 参数需为字符串
+    end_date = datetime.datetime.strptime(str(end_date), '%Y-%m-%d')
+    return start_date, end_date
+
+
+def financial_history(request):
+    """
+    period: 时间段,如'2020-01'(至今), '2020-05-01~2020-05-31'
+    income_expense: 收入/支出,1表示收入,2表示支出,0表示总收益
+    """
+    period = request.GET.get('period')
+    income_expense = request.GET.get('income_expense')
+    if not (period and income_expense):
+        return render(request, 'financial_history.html')
+    start_date, end_date = parse_period(period)
+    start_date = datetime.datetime.combine(start_date, datetime.time.min)
+    end_date = datetime.datetime.combine(end_date, datetime.time.max)
+    queryset = models.Bill.objects.filter(timestamp__range=(start_date, end_date))
+    total_amount = 0
+    type_display = '总收益'
+    if income_expense == 1:
+        queryset = queryset.filter(type=1)
+        type_display = '收入'
+    if income_expense == 2:
+        queryset = queryset.filter(type=2)
+        type_display = '支出'
+    for bill in queryset:
+        total_amount += bill.amount
+    context = {
+        'bills': queryset,
+        'total_amount': total_amount,
+        'period': period,
+        'income_expense': type_display
+    }
+    return render(request, 'financial_history.html', context)
