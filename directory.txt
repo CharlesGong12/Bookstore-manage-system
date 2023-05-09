@@ -1,0 +1,34 @@
+-.idea
+-.venv  虚拟环境
+-app01  项目app
+    -middleware 中间件
+        -auth.py   权限限制
+    -migrations 迁移文件
+    -state  静态文件，jquery, bootstrap
+    -templates  模板文件
+    -utils
+        -bootstrap.py   设置bootstrap样式
+        -encrypt.py md5加密
+        -form.py    表单
+        -pagination.py  分页
+    -views
+        -account.py 账号登录操作
+        -admin.py   用户管理
+        -bill.py 账单
+        -book.py     书籍
+        -order.py   进货订单
+        -password_generate.py   密码生成测试
+        -user.py    个人信息
+    -__init__.py
+    -admin.py
+    -apps.py
+    -models.py  模型
+    -tests.py
+-project.py     项目配置
+    -__init__.py
+    -asgi.py
+    -settings.py    设置
+    -urls.py    路由
+    -wsgi.py    
+-manage.py
+-README.md
